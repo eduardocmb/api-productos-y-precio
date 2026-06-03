@@ -35,4 +35,7 @@ def delete_producto(db: Session, producto_id: int):
     return db_producto
 
 def search_productos(db: Session, query: str):
-    return db.query(Producto).filter(Producto.nombre.contains(query)).all()
+    if not query:
+        return db.query(Producto).all()
+    pattern = f"%{query}%"
+    return db.query(Producto).filter(Producto.nombre.ilike(pattern)).all()
